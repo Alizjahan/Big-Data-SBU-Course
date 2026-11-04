@@ -1,0 +1,750 @@
+\documentclass[11pt,a4paper]{article}
+
+% =========================================================
+% Packages
+% =========================================================
+\usepackage[a4paper,top=2.2cm,bottom=2.2cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{etoolbox}
+\usepackage{hyperref}
+
+% =========================================================
+% Color Palette (Harmonious Modern Academic)
+% =========================================================
+\definecolor{primaryColor}{RGB}{16, 44, 82}      % Deep Midnight Navy (#102C52)
+\definecolor{secondaryColor}{RGB}{28, 90, 160}   % Vibrant Royal Sapphire (#1C5AA0)
+\definecolor{accentColor}{RGB}{198, 130, 24}     % Warm Imperial Amber (#C68218)
+\definecolor{accentDark}{RGB}{160, 102, 14}      % Deep Ochre
+\definecolor{tealAccent}{RGB}{18, 128, 112}      % Persian Emerald Teal (#128070)
+\definecolor{textDark}{RGB}{44, 50, 60}          % Soft Charcoal (#2C323C)
+\definecolor{cardBg}{RGB}{252, 253, 255}         % Crisp Bright Card Body
+\definecolor{cardBorder}{RGB}{210, 220, 234}     % Soft Clean Border
+\definecolor{headerBg}{RGB}{236, 242, 250}       % Soft Navy Table Header Tint
+\definecolor{highlightRow}{RGB}{232, 246, 242}   % Soft Mint for Optimal Row
+
+% Backwards compatibility aliases
+\definecolor{myNavy}{RGB}{16, 44, 82}
+\definecolor{myBlue}{RGB}{28, 90, 160}
+\definecolor{myGold}{RGB}{198, 130, 24}
+\definecolor{darkGray}{RGB}{44, 50, 60}
+\definecolor{lightGray}{RGB}{252, 253, 255}
+\definecolor{myVeryLight}{RGB}{252, 253, 255}
+\definecolor{borderColor}{RGB}{210, 220, 234}
+
+% =========================================================
+% Hyperref Setup
+% =========================================================
+\hypersetup{
+	colorlinks=true,
+	linkcolor=secondaryColor,
+	urlcolor=secondaryColor,
+	citecolor=secondaryColor,
+	pdftitle={گزارش جامع تمرین اول تحلیل سیستم‌های داده‌های حجیم},
+	pdfauthor={علیرضا جهانبخش}
+}
+
+% =========================================================
+% Spacing & Typography (Airy, Breathable & Clean)
+% =========================================================
+\setstretch{1.26}
+\setlength{\parskip}{0.48em plus 0.1em minus 0.05em}
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{16pt}
+
+\setlist[itemize]{leftmargin=1.8em, itemsep=0.32em, topsep=0.28em, parsep=0.1em}
+\setlist[enumerate]{leftmargin=1.8em, itemsep=0.32em, topsep=0.28em, parsep=0.1em}
+
+% =========================================================
+% Headers and Footers
+% =========================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\textcolor{textDark}{تحلیل سیستم‌های داده‌های حجیم (\lr{Big Data})}}
+\fancyhead[L]{\small\textcolor{textDark}{تمرین اول: \lr{MapReduce} و \lr{LSH}}}
+\fancyfoot[C]{\small\textcolor{primaryColor}{\bfseries\thepage}}
+
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{%
+	{\color{accentColor}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}
+}
+
+% =========================================================
+% Section Formatting (Modern Minimalist)
+% =========================================================
+\titleformat{\section}
+	{\normalfont\large\bfseries\color{primaryColor}}
+	{\thesection}{0.7em}{}
+	[\vspace{0.12cm}{\color{cardBorder}\hrule height 0.6pt}]
+
+\titleformat{\subsection}
+	{\normalfont\normalsize\bfseries\color{secondaryColor}}
+	{\thesubsection}{0.6em}{}
+
+\titleformat{\subsubsection}
+	{\normalfont\small\bfseries\color{textDark}}
+	{\thesubsubsection}{0.6em}{}
+
+\titlespacing*{\section}{0pt}{16pt}{9pt}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+\titlespacing*{\subsubsection}{0pt}{9pt}{4pt}
+
+% =========================================================
+% Modern Harmonious Card Styles (tcolorbox)
+% =========================================================
+\tcbset{
+	cardbase/.style={
+		enhanced,
+		colback=cardBg,
+		arc=2mm,
+		boxrule=0.8pt,
+		left=11pt,
+		right=11pt,
+		top=9pt,
+		bottom=9pt,
+		toptitle=4.5pt,
+		bottomtitle=4.5pt,
+		fonttitle=\small\bfseries,
+		coltitle=white,
+		titlerule=0pt
+	},
+	primarycard/.style={
+		cardbase,
+		colframe=primaryColor,
+		colbacktitle=primaryColor
+	},
+	accentcard/.style={
+		cardbase,
+		colframe=accentColor,
+		colbacktitle=accentColor
+	},
+	tealcard/.style={
+		cardbase,
+		colframe=tealAccent,
+		colbacktitle=tealAccent
+	}
+}
+
+% =========================================================
+% Persian Language Setup with Kalameh Font
+% (Both for Persian and Latin words; Math remains standard)
+% =========================================================
+\usepackage{xepersian}
+\settextfont{XB Niloofar}
+\setlatintextfont{XB Niloofar}
+
+\begin{document}
+	
+	% =========================================================
+	% Title Page (Exact User-Approved Template)
+	% =========================================================
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\centering
+		
+		\begingroup
+		\setstretch{1.05}
+		
+		\vspace*{0.2cm}
+		
+		\noindent\textcolor{primaryColor}{\rule{\textwidth}{1.0pt}}\\[-0.18cm]
+		\noindent\textcolor{accentColor}{\rule{0.35\textwidth}{1.0pt}}
+		
+		\vspace{0.5cm}
+		
+		\begin{minipage}{0.20\textwidth}
+			\centering
+			\IfFileExists{images/logo.png}{
+				\includegraphics[width=0.90\textwidth]{images/logo.png}
+			}{
+				\vspace{1.0cm}
+				{\small\bfseries [دانشگاه شهید بهشتی]}
+				\vspace{1.0cm}
+			}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.76\textwidth}
+			{\Large\bfseries\textcolor{primaryColor}{دانشگاه شهید بهشتی}}\\[0.12cm]
+			{\normalsize دانشکده مهندسی و علوم کامپیوتر}\\[0.08cm]
+			{\normalsize گروه علم داده‌ها}\\[0.12cm]
+			{\large درس تحلیل سیستم‌های داده‌های حجیم (\lr{Big Data})}\\[0.12cm]
+			\textcolor{accentColor}{\rule{0.55\textwidth}{0.6pt}}
+		\end{minipage}
+		
+		\vspace{3.0cm}
+		
+		{\normalsize\bfseries\textcolor{accentColor}{گزارش جامع تمرین اول}}\\[0.30cm]
+		{\LARGE\bfseries\textcolor{primaryColor}{مبانی برنامه‌نویسی \lr{MapReduce} و الگوریتم \lr{LSH}}}\\[0.20cm]
+		{\small\textcolor{textDark}{ضرب ماتریس‌ها، عملگرهای رابطه‌ای، \lr{MinHash} و بازیابی شباهت در مقیاس کلان}}
+		
+		\vspace{1.4cm}
+		
+		\begin{tcolorbox}[
+			colback=white,
+			colframe=primaryColor,
+			width=0.84\textwidth,
+			arc=1.0mm,
+			boxrule=0.6pt,
+			left=12pt,
+			right=12pt,
+			top=8pt,
+			bottom=8pt
+			]
+			{\small\bfseries\textcolor{primaryColor}{مشخصات گزارش و تحویل‌دهنده}}
+			
+			\vspace{0.12cm}
+			\textcolor{accentColor}{\rule{\textwidth}{0.4pt}}
+			\vspace{0.18cm}
+			
+			\renewcommand{\arraystretch}{1.25}
+			\small
+			\begin{tabular}{@{}>{\bfseries\color{primaryColor}}l@{\hspace{1.5cm}}l@{}}
+				استاد درس:         & سرکار خانم دکتر ریاحی \\
+				دستیار آموزشی:     & سرکار خانم زارع \\
+				دانشجو:            & علیرضا جهانبخش \\
+				شماره دانشجویی:    & ۴۰۴۴۲۲۲۰۶ \\
+				نیم‌سال تحصیلی:     & ۴۰۵۱ (پاییز ۱۴۰۵) \\
+				تاریخ تحویل:       & آبان ۱۴۰۵ \\
+				مخزن گیت‌هاب:      & \href{https://github.com/Alizjahan/Big-Data-SBU-Course/tree/main/assignments/HW1}{\lr{\texttt{Big-Data-SBU-Course/HW1}}} \\
+			\end{tabular}
+			\renewcommand{\arraystretch}{1}
+		\end{tcolorbox}
+		
+		\vfill
+		
+		\textcolor{accentColor}{\rule{0.32\textwidth}{0.6pt}}\\[0.15cm]
+		{\normalsize\bfseries\textcolor{primaryColor}{دانشکده مهندسی و علوم کامپیوتر}}\\[0.05cm]
+		{\footnotesize\textcolor{textDark}{گروه علم داده‌ها}}
+		
+		\endgroup
+	\end{titlepage}
+	
+	\tableofcontents
+	\newpage
+	
+	% =========================================================
+	% سؤال اول
+	% =========================================================
+	\section{سؤال اول: محاسبه حاصل‌ضرب ماتریس‌ها با الگوریتم \lr{MapReduce}}
+	
+	دو ماتریس غیرمربعی $A$ از مرتبه $2 \times 3$ و $B$ از مرتبه $3 \times 2$ به شرح زیر مفروض هستند:
+	\begin{equation}
+		A = \begin{bmatrix} 1 & 2 & 0 \\ 3 & 1 & 2 \end{bmatrix}, \quad
+		B = \begin{bmatrix} 2 & 1 \\ 0 & 3 \\ 4 & 2 \end{bmatrix}
+	\end{equation}
+	هدف، محاسبه ماتریس حاصل‌ضرب $C = A \times B$ از مرتبه $2 \times 2$ با استفاده از مدل برنامه‌نویسی توزیع‌شده \lr{MapReduce} است. درایه‌های ماتریس $A$ به صورت چهارگانه $(A, i, j, \text{value})$ و درایه‌های ماتریس $B$ به صورت $(B, j, k, \text{value})$ ذخیره شده‌اند و اندیس‌ها از ۱ آغاز می‌شوند ($i \in \{1, 2\}$، $j \in \{1, 2, 3\}$ و $k \in \{1, 2\}$).
+	
+	\subsection{الف) تشریح الگوریتم دوسطحی \lr{MapReduce}}
+	فرمول ریاضی محاسبه هر درایه ماتریس حاصل‌ضرب به صورت زیر تعریف می‌شود:
+	\begin{equation}
+		C_{ik} = \sum_{j=1}^{n} A_{ij} B_{jk}
+	\end{equation}
+	این رابطه ریاضی متشکل از دو بخش محاسباتی مستقل است:
+	\begin{enumerate}
+		\item \textbf{تولید حاصل‌ضرب‌های جزئی (\lr{Partial Products}):} به ازای هر سه‌گانه $(i, j, k)$، مقدار $A_{ij} \times B_{jk}$ باید محاسبه شود.
+		\item \textbf{تجمیع و جمع‌بندی (\lr{Aggregation}):} جمع‌بندی تمام ضرب‌های جزئی به ازای اندیس مشترک $j$ برای سلول نهایی $C_{ik}$.
+	\end{enumerate}
+	
+	بر همین اساس، الگوریتم در دو مرحله (\lr{Phase}) کامل و مجزا پیاده‌سازی می‌گردد:
+	
+	\begin{tcolorbox}[primarycard, title={مرحله اول: تولید ضرب‌های جزئی (\lr{Partial Products Generation})}]
+		\small
+		\begin{itemize}
+			\item \textbf{فاز \lr{Map}:} مپِر (\lr{Mapper}) رکوردهای ورودی ماتریس‌ها را به شرح زیر می‌خواند:
+			\begin{itemize}
+				\item برای هر درایه ماتریس $A(i, j, a)$، کلید خروجی برابر اندیس ستونی $j$ و مقدار برابر زوج $(A, i, a)$ است.
+				\item برای هر درایه ماتریس $B(j, k, b)$، کلید خروجی برابر اندیس سطری $j$ و مقدار برابر زوج $(B, k, b)$ است.
+			\end{itemize}
+			\item \textbf{فاز \lr{Shuffle / Grouping}:} بر اساس کلید میانی $j$، تمامی درایه‌های ستون $j$-ام از $A$ و سطر $j$-ام از $B$ روی یک ردیوسر مشترک متمرکز می‌گردند.
+			\item \textbf{فاز \lr{Reduce}:} به ازای کلید $j$، ردیوسر دو لیست مقادیر $A$ و $B$ را دریافت کرده و ضرب دکارتی آن‌ها را تشکیل می‌دهد. برای هر جفت $(A, i, a)$ و $(B, k, b)$، حاصل‌ضرب جزئی $v = a \times b$ محاسبه شده و با کلید جدید مختصاتی $((i, k), v)$ منتشر می‌گردد.
+		\end{itemize}
+	\end{tcolorbox}
+	
+	\vspace{0.2cm}
+	
+	\begin{tcolorbox}[accentcard, title={مرحله دوم: تجمیع مقادیر نهایی (\lr{Aggregation Phase})}]
+		\small
+		\begin{itemize}
+			\item \textbf{فاز \lr{Map}:} یک مپِر همانی (\lr{Identity Mapper}) است که خروجی‌های مرحله اول را بدون تغییر ارسال می‌کند: کلید $(i, k)$ و مقدار $v$.
+			\item \textbf{فاز \lr{Shuffle / Grouping}:} تمامی حاصل‌ضرب‌های جزئی با کلید مشترک $(i, k)$ در یک گروه دسته‌بندی می‌شوند.
+			\item \textbf{فاز \lr{Reduce}:} ردیوسر مقادیر لیست ورودی $[v_1, v_2, \dots, v_n]$ را جمع زده و درایه نهایی را به صورت $((i, k), C_{ik})$ ساطع می‌نماید.
+		\end{itemize}
+	\end{tcolorbox}
+	
+	\subsection{ب) ساختار جفت‌های کلید-مقدار و نقش کلیدها در گروه‌بندی}
+	
+	\begin{table}[H]
+		\centering
+		\small
+		\renewcommand{\arraystretch}{1.35}
+		\caption{ساختار جفت‌های کلید-مقدار (\lr{Key-Value}) در دو مرحله \lr{MapReduce}}
+		\vspace{0.15cm}
+		\begin{latin}
+			\begin{tabular}{llll}
+				\toprule
+				\rowcolor{headerBg}
+				\textbf{Stage} & \textbf{Component} & \textbf{Key} & \textbf{Value} \\
+				\midrule
+				\multirow{2}{*}{Stage 1} & Map Output & $j$ & $(A, i, A_{ij})$ \text{or} $(B, k, B_{jk})$ \\
+				& Reduce Output & $(i, k)$ & $A_{ij} \times B_{jk}$ \\
+				\midrule
+				\multirow{2}{*}{Stage 2} & Map Output & $(i, k)$ & $A_{ij} \times B_{jk}$ \\
+				& Reduce Output & $(i, k)$ & $C_{ik} = \sum_{j} A_{ij} B_{jk}$ \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{table}
+	
+	\textbf{نقش استراتژیک کلیدها در هدایت جریان داده‌ها:}
+	\begin{itemize}
+		\item در \textbf{مرحله اول}، انتخاب اندیس میانی $j$ به عنوان کلید، نقش متصل‌کننده ابعاد مشترک ضرب ماتریسی را ایفا می‌کند و تضمین می‌نماید که ستون $j$ از $A$ با سطر $j$ از $B$ روی یک گره محاسباتی قرار گیرند.
+		\item در \textbf{مرحله دوم}، انتخاب جفت مختصات هدف $(i, k)$ به عنوان کلید، تمامی ضرایب جزئی یک درایه مشخص از ماتریس نهایی را در یک نقطه تجمیع کرده و امکان جمع موازی مستقل را فراهم می‌سازد.
+	\end{itemize}
+	
+	\subsection{ج) ردیابی گام‌به‌گام برای درایه $C_{12}$ و محاسبه کل ماتریس $C$}
+	
+	برای محاسبه درایه $C_{12}$ ($i=1, k=2$):
+	\begin{itemize}
+		\item عناصر سطر اول ماتریس $A$: $(A, 1, 1, 1)، (A, 1, 2, 2)، (A, 1, 3, 0)$
+		\item عناصر ستون دوم ماتریس $B$: $(B, 1, 2, 1)، (B, 2, 2, 3)، (B, 3, 2, 2)$
+	\end{itemize}
+	
+	\textbf{ردیابی در مرحله اول (تولید ضرب‌های جزئی):}
+	\begin{itemize}
+		\item کلید $j=1$: مقدار $(A, 1, 1)$ و $(B, 2, 1)$ ضرب شده $\implies$ خروجی: $((1, 2), 1 \times 1 = 1)$.
+		\item کلید $j=2$: مقدار $(A, 1, 2)$ و $(B, 2, 3)$ ضرب شده $\implies$ خروجی: $((1, 2), 2 \times 3 = 6)$.
+		\item کلید $j=3$: مقدار $(A, 1, 0)$ و $(B, 2, 2)$ ضرب شده $\implies$ خروجی: $((1, 2), 0 \times 2 = 0)$.
+	\end{itemize}
+	
+	\textbf{ردیابی در مرحله دوم (تجمیع نهایی):}
+	\begin{itemize}
+		\item ردیوسر متناظر با کلید $(1, 2)$ مقادیر لیست $[1, 6, 0]$ را دریافت کرده و حاصل جمع را محاسبه می‌کند:
+		\begin{equation}
+			C_{12} = 1 + 6 + 0 = 7
+		\end{equation}
+	\end{itemize}
+	
+	\textbf{محاسبه تمامی درایه‌های ماتریس $C$:}
+	\begin{align}
+		C_{11} &= A_{11}B_{11} + A_{12}B_{21} + A_{13}B_{31} = 1(2) + 2(0) + 0(4) = 2 + 0 + 0 = 2 \\
+		C_{12} &= A_{11}B_{12} + A_{12}B_{22} + A_{13}B_{32} = 1(1) + 2(3) + 0(2) = 1 + 6 + 0 = 7 \\
+		C_{21} &= A_{21}B_{11} + A_{22}B_{21} + A_{23}B_{31} = 3(2) + 1(0) + 2(4) = 6 + 0 + 8 = 14 \\
+		C_{22} &= A_{21}B_{12} + A_{22}B_{22} + A_{23}B_{32} = 3(1) + 1(3) + 2(2) = 3 + 3 + 4 = 10
+	\end{align}
+	
+	بنابراین ماتریس خروجی به شکل زیر حاصل می‌گردد:
+	\begin{equation}
+		C = \begin{bmatrix} 2 & 7 \\ 14 & 10 \end{bmatrix}
+	\end{equation}
+	
+	\subsection{د) قابلیت‌های موازی‌سازی و مناسب بودن برای داده‌های بزرگ}
+	\begin{enumerate}
+		\item \textbf{بخش‌های قابل اجرای موازی:}
+		فازهای نگاشت (\lr{Map}) هر دو مرحله کاملاً مستقل هستند. همچنین تا سقف $n$ ردیوسر در مرحله اول و تا سقف $m \times p$ ردیوسر در مرحله دوم می‌توانند به طور هم‌زمان و موازی روی کلاسترهای توزیع‌شده اجرا گردند.
+		\item \textbf{مزایای روش برای ماتریس‌های بسیار بزرگ:}
+		\begin{itemize}
+			\item \textbf{مدیریت حافظه (\lr{Out-of-Core}):} هیچ پردازنده‌ای نیازمند بارگذاری کل ماتریس‌های عظیم در رم نیست.
+			\item \textbf{بهینگی در ماتریس‌های خلوت (\lr{Sparsity}):} درایه‌های صفر فیلتر شده و حجم ترافیک شبکه به حداقل می‌رسد.
+			\item \textbf{مقیاس‌پذیری افقی (\lr{Scalability}):} بار محاسباتی بدون گلوگاه به تسک‌های مستقل شکسته می‌شود.
+		\end{itemize}
+	\end{enumerate}
+	
+	% =========================================================
+	% سؤال دوم
+	% =========================================================
+	\section{سؤال دوم: پیاده‌سازی عملگرهای رابطه‌ای در \lr{MapReduce}}
+	
+	جداول رابطه‌ای مفروض عبارتند از:
+	\begin{itemize}
+		\item جدول $R_1$: شامل $(11, \text{Ali}, \text{CS})، (14, \text{Sara}, \text{Math})، (18, \text{Mina}, \text{CS})$
+		\item جدول $R_2$: شامل $(14, \text{Sara}, \text{Math})، (21, \text{Reza}, \text{CS})، (22, \text{Neda}, \text{Physics})$
+		\item جدول $R_3$: شامل $(11, \text{Tehran})، (14, \text{Shiraz})، (21, \text{Tabriz})، (25, \text{Isfahan})$
+	\end{itemize}
+	
+	\subsection{الف) طراحی توابع \lr{Map} و \lr{Reduce} برای اجتماع مجموعه‌ای (\lr{Set Union})}
+	هدف، محاسبه اجتماع $U = R_1 \cup R_2$ همراه با حذف سطرهای تکراری است:
+	
+	\begin{itemize}
+		\item \textbf{طراحی تابع \lr{Map}:}
+		به ازای هر سطر $t = (\text{EmployeeID}, \text{Name}, \text{Department})$ در جداول $R_1$ و $R_2$، کل محتوای سطر به عنوان کلید ساطع می‌شود و مقدار آن یک پرچم نمادین (مانند ۱) است:
+		\begin{equation}
+			\text{Map}(t) \longrightarrow (t, 1)
+		\end{equation}
+		\item \textbf{مکانیزم حذف ردیف‌های تکراری:}
+		در مرحله \lr{Shuffle}، رکوردهایی با محتوای یکسان به دلیل کلید برابر به یک ردیوسر مشترک هدایت می‌شوند. اگر سطری در هر دو جدول باشد، ورودی ردیوسر به شکل $(t, [1, 1])$ خواهد بود.
+		\item \textbf{طراحی تابع \lr{Reduce}:}
+		ردیوسر تنها یک نسخه از کلید $t$ را به خروجی ارسال کرده و تکرار مقادیر را نادیده می‌گیرد:
+		\begin{equation}
+			\text{Reduce}(t, [1, \dots, 1]) \longrightarrow t
+		\end{equation}
+	\end{itemize}
+	
+	\subsection{ب) خروجی نهایی عملیات اجتماع مجموعه‌ای}
+	سطر $(14, \text{Sara}, \text{Math})$ که در هر دو جدول تکرار شده بود، پس از پالایش یک‌بار درج شده و جدول اجتماع $U$ دارای ۵ رکورد متمایز زیر می‌گردد:
+	
+	\begin{table}[H]
+		\centering
+		\small
+		\renewcommand{\arraystretch}{1.35}
+		\caption{جدول خروجی اجتماع مجموعه‌ای ($U = R_1 \cup R_2$)}
+		\vspace{0.15cm}
+		\begin{latin}
+			\begin{tabular}{cll}
+				\toprule
+				\rowcolor{headerBg}
+				\textbf{EmployeeID} & \textbf{Name} & \textbf{Department} \\
+				\midrule
+				11 & Ali & CS \\
+				14 & Sara & Math \\
+				18 & Mina & CS \\
+				21 & Reza & CS \\
+				22 & Neda & Physics \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{table}
+	
+	\subsection{ج) تشریح الگوریتم پیوند درونی (\lr{Inner Join}) با \lr{MapReduce}}
+	برای اجرای پیوند بین جدول اجتماع $U$ و جدول $R_3$ بر مبنای ستون مشترک \lr{EmployeeID}، الگوریتم \lr{Reduce-Side Join} به کار گرفته می‌شود:
+	
+	\begin{itemize}
+		\item \textbf{فاز \lr{Map}:} ستون پیوند (\lr{EmployeeID}) به عنوان کلید انتخاب می‌شود و مقادیر با نام جدول برچسب‌گذاری می‌گردند:
+		\begin{align}
+			U: (e, n, d) &\longrightarrow (e, (U, n, d)) \\
+			R_3: (e, c) &\longrightarrow (e, (R_3, c))
+		\end{align}
+		
+		\item \textbf{فاز \lr{Shuffle}:} رکوردهای با کلید مشترک در ردیوسرها متمرکز می‌گردند:
+		
+		\begin{center}
+		\small
+		\renewcommand{\arraystretch}{1.3}
+		\begin{latin}
+		\begin{tabular}{ll@{\hspace{1.5cm}}ll}
+			\toprule
+			\rowcolor{headerBg}
+			\textbf{Key} & \textbf{Grouped Values} & \textbf{Key} & \textbf{Grouped Values} \\
+			\midrule
+			11 & $[(U, \text{Ali}, \text{CS}), (R_3, \text{Tehran})]$ & 21 & $[(U, \text{Reza}, \text{CS}), (R_3, \text{Tabriz})]$ \\
+			14 & $[(U, \text{Sara}, \text{Math}), (R_3, \text{Shiraz})]$ & 22 & $[(U, \text{Neda}, \text{Physics})]$ \\
+			18 & $[(U, \text{Mina}, \text{CS})]$ & 25 & $[(R_3, \text{Isfahan})]$ \\
+			\bottomrule
+		\end{tabular}
+		\end{latin}
+		\end{center}
+		
+		\item \textbf{فاز \lr{Reduce}:} ردیوسر عناصر ورودی را به دو گروه رکوردهای متعلق به $U$ و $R_3$ افراز می‌کند. شرط اتصال در \lr{Inner Join}، ناتهی بودن هم‌زمان هر دو زیرمجموعه است؛ در صورت برقراری شرط، ضرب دکارتی مقادیر با فرمت $(e, n, d, c)$ تولید می‌گردد.
+	\end{itemize}
+	
+	\subsection{د) خروجی نهایی پیوند و تحلیل ردیف‌های نامنطبق}
+	
+	\begin{table}[H]
+		\centering
+		\small
+		\renewcommand{\arraystretch}{1.35}
+		\caption{خروجی نهایی پیوند درونی ($U \bowtie R_3$)}
+		\vspace{0.15cm}
+		\begin{latin}
+			\begin{tabular}{clll}
+				\toprule
+				\rowcolor{headerBg}
+				\textbf{EmployeeID} & \textbf{Name} & \textbf{Department} & \textbf{City} \\
+				\midrule
+				11 & Ali & CS & Tehran \\
+				14 & Sara & Math & Shiraz \\
+				21 & Reza & CS & Tabriz \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{table}
+	
+	\textbf{تحلیل علت حذف رکوردهای نامنطبق (\lr{Dangling Tuples}):}
+	\begin{itemize}
+		\item کارمندان با شناسه ۱۸ (مینا) و ۲۲ (ندا) تنها در جدول کارمندان حضور داشتند و در جدول شهرها ($R_3$) اطلاعاتی برای آن‌ها تعریف نشده بود.
+		\item شناسه ۲۵ (اصفهان) تنها در جدول شهرها ثبت شده بود و کارمندی به آن انتساب داده نشده بود.
+		\item بر اساس ماهیت پیوند درونی (\lr{Inner Join})، تنها رکوردهایی در خروجی ظاهر می‌شوند که کلید آن‌ها در هر دو رابطه والد متناظر باشد.
+	\end{itemize}
+	
+	% =========================================================
+	% سؤال سوم
+	% =========================================================
+	\section{سؤال سوم: شینگلینگ، مین‌هش و شباهت جکارد}
+	
+	سه سند متنی به صورت زیر مفروض هستند:
+	\begin{equation}
+		D_1 = \text{"mnrsm"}, \quad D_2 = \text{"mnrtm"}, \quad D_3 = \text{"mnrsn"}
+	\end{equation}
+	طول هر شینگل $k=2$ بوده و توکن‌ها کاراکترهای رشته‌ها هستند.
+	
+	\subsection{الف) استخراج 2-shingleها و تشکیل ماتریس مشخصه}
+	با لغزاندن پنجره با طول ۲ بر روی رشته‌ها، شینگل‌های هر سند به صورت زیر به دست می‌آیند:
+	\begin{itemize}
+		\item $S_1 = \{\text{mn}, \text{nr}, \text{rs}, \text{sm}\}$
+		\item $S_2 = \{\text{mn}, \text{nr}, \text{rt}, \text{tm}\}$
+		\item $S_3 = \{\text{mn}, \text{nr}, \text{rs}, \text{sn}\}$
+	\end{itemize}
+	
+	شینگل‌های متمایز بر اساس ترتیب الفبایی از ۰ تا ۶ اندیس‌گذاری می‌شوند:
+	\begin{center}
+		\small
+		\colorbox{cardBg}{\fbox{\color{primaryColor}$0:\text{mn}, \quad 1:\text{nr}, \quad 2:\text{rs}, \quad 3:\text{rt}, \quad 4:\text{sm}, \quad 5:\text{sn}, \quad 6:\text{tm}$}}
+	\end{center}
+	
+	\begin{table}[H]
+		\centering
+		\small
+		\renewcommand{\arraystretch}{1.30}
+		\caption{ماتریس مشخصه (\lr{Characteristic Matrix})}
+		\vspace{0.15cm}
+		\begin{latin}
+			\begin{tabular}{ccccc}
+				\toprule
+				\rowcolor{headerBg}
+				\textbf{Index ($x$)} & \textbf{2-Shingle} & $D_1$ & $D_2$ & $D_3$ \\
+				\midrule
+				0 & mn & 1 & 1 & 1 \\
+				1 & nr & 1 & 1 & 1 \\
+				2 & rs & 1 & 0 & 1 \\
+				3 & rt & 0 & 1 & 0 \\
+				4 & sm & 1 & 0 & 0 \\
+				5 & sn & 0 & 0 & 1 \\
+				6 & tm & 0 & 1 & 0 \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{table}
+	
+	\subsection{ب) محاسبه امضای \lr{MinHash} و ماتریس \lr{Signature}}
+	مقادیر توابع جایگشت پیشنهادی برای اندیس‌های ۰ تا ۶ به شرح زیر هستند:
+	\begin{itemize}
+		\item $h_1(x) = [3, 0, 5, 2, 6, 1, 4]$
+		\item $h_2(x) = [6, 2, 0, 4, 1, 5, 3]$
+		\item $h_3(x) = [1, 5, 4, 0, 3, 6, 2]$
+	\end{itemize}
+	
+	امضای هر سند برابر با کمترین مقدار تابع هش روی سطرهای فعال (مقدار ۱) است:
+	
+	\begin{tcolorbox}[primarycard, title={محاسبه امضای اسناد $D_1$، $D_2$ و $D_3$}]
+		\small
+		\textbf{سند $D_1$ (سطرهای فعال $\{0, 1, 2, 4\}$):}
+		\begin{align*}
+			h_1(D_1) &= \min(h_1(0), h_1(1), h_1(2), h_1(4)) = \min(3, 0, 5, 6) = 0 \\
+			h_2(D_1) &= \min(h_2(0), h_2(1), h_2(2), h_2(4)) = \min(6, 2, 0, 1) = 0 \\
+			h_3(D_1) &= \min(h_3(0), h_3(1), h_3(2), h_3(4)) = \min(1, 5, 4, 3) = 1
+		\end{align*}
+		
+		\vspace{0.1cm}
+		\textbf{سند $D_2$ (سطرهای فعال $\{0, 1, 3, 6\}$):}
+		\begin{align*}
+			h_1(D_2) &= \min(h_1(0), h_1(1), h_1(3), h_1(6)) = \min(3, 0, 2, 4) = 0 \\
+			h_2(D_2) &= \min(h_2(0), h_2(1), h_2(3), h_2(6)) = \min(6, 2, 4, 3) = 2 \\
+			h_3(D_2) &= \min(h_3(0), h_3(1), h_3(3), h_3(6)) = \min(1, 5, 0, 2) = 0
+		\end{align*}
+		
+		\vspace{0.1cm}
+		\textbf{سند $D_3$ (سطرهای فعال $\{0, 1, 2, 5\}$):}
+		\begin{align*}
+			h_1(D_3) &= \min(h_1(0), h_1(1), h_1(2), h_1(5)) = \min(3, 0, 5, 1) = 0 \\
+			h_2(D_3) &= \min(h_2(0), h_2(1), h_2(2), h_2(5)) = \min(6, 2, 0, 5) = 0 \\
+			h_3(D_3) &= \min(h_3(0), h_3(1), h_3(2), h_3(5)) = \min(1, 5, 4, 6) = 1
+		\end{align*}
+	\end{tcolorbox}
+	
+	\begin{table}[H]
+		\centering
+		\small
+		\renewcommand{\arraystretch}{1.30}
+		\caption{ماتریس امضاها (\lr{Signature Matrix})}
+		\vspace{0.15cm}
+		\begin{latin}
+			\begin{tabular}{cccc}
+				\toprule
+				\rowcolor{headerBg}
+				\textbf{Hash Function} & $D_1$ & $D_2$ & $D_3$ \\
+				\midrule
+				$h_1$ & 0 & 0 & 0 \\
+				$h_2$ & 0 & 2 & 0 \\
+				$h_3$ & 1 & 0 & 1 \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{table}
+	
+	\subsection{ج) مقایسه شباهت واقعی \lr{Jaccard} و شباهت تخمینی \lr{MinHash}}
+	فرمول‌های شباهت واقعی و تخمینی عبارتند از:
+	\begin{equation}
+		J(S_a, S_b) = \frac{|S_a \cap S_b|}{|S_a \cup S_b|}, \quad \hat{J}(D_a, D_b) = \frac{1}{K} \sum_{i=1}^{K} \mathbf{1}_{\{h_i(D_a) = h_i(D_b)\}}
+	\end{equation}
+	
+	\begin{itemize}
+		\item \textbf{برای زوج $(D_1, D_2)$:}
+		اشتراک شامل $\{\text{mn}, \text{nr}\}$ (طول ۲) و اجتماع شامل ۶ عضو است: $J(D_1, D_2) = \frac{2}{6} = \frac{1}{3} \approx 0.3333$.
+		در ماتریس امضاها تنها در سطر $h_1$ برابری وجود دارد $\implies \hat{J} = \frac{1}{3} \approx 0.3333$ (خطای مطلق برابر $0.0000$).
+		
+		\item \textbf{برای زوج $(D_1, D_3)$:}
+		اشتراک شامل $\{\text{mn}, \text{nr}, \text{rs}\}$ (طول ۳) و اجتماع شامل ۵ عضو است: $J(D_1, D_3) = \frac{3}{5} = 0.6000$.
+		در ماتریس امضاها در هر سه تابع برابری وجود دارد $\implies \hat{J} = \frac{3}{3} = 1.0000$ (خطای مطلق برابر $0.4000$).
+	\end{itemize}
+	
+	\begin{table}[H]
+		\centering
+		\small
+		\renewcommand{\arraystretch}{1.35}
+		\caption{مقایسه مقادیر شباهت واقعی و تخمینی}
+		\vspace{0.15cm}
+		\begin{latin}
+			\begin{tabular}{cccc}
+				\toprule
+				\rowcolor{headerBg}
+				\textbf{Pair} & \textbf{Exact Jaccard ($J$)} & \textbf{MinHash Estimate ($\hat{J}$)} & \textbf{Absolute Error} \\
+				\midrule
+				$(D_1, D_2)$ & $2/6 \approx 0.3333$ & $1/3 \approx 0.3333$ & $0.0000$ \\
+				$(D_1, D_3)$ & $3/5 = 0.6000$ & $3/3 = 1.0000$ & $0.4000$ \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{table}
+	
+	\subsection{د) تحلیل تفاوت تخمین و اثر افزایش تعداد توابع هش}
+	\begin{enumerate}
+		\item \textbf{علت تفاوت تخمین با مقدار واقعی:}
+		تخمین \lr{MinHash} بر مبنای متغیر تصادفی برنولی با امید ریاضی $\mathbb{E}[\hat{J}] = J$ است (برآوردگر نااریب). اما با تعداد اندک توابع هش ($K=3$)، مقادیر ممکن تخمین تنها اعضای مجموعه گسسته $\{0, \frac{1}{3}, \frac{2}{3}, 1\}$ هستند و عدد $0.6$ امکان تحقق مستقیم ندارد.
+		\item \textbf{اثر افزایش تعداد جایگشت‌های تصادفی مستقل ($K$):}
+		واریانس تخمین‌گر با تعداد توابع هش نسبت معکوس دارد:
+		\begin{equation}
+			\text{Var}(\hat{J}) = \frac{J(1 - J)}{K} \implies \sigma_{\hat{J}} = \sqrt{\frac{J(1 - J)}{K}} = \mathcal{O}\left(\frac{1}{\sqrt{K}}\right)
+		\end{equation}
+		با افزایش $K$ (مثلاً به ۱۰۰ یا ۲۰۰)، انحراف معیار به شدت کاهش یافته و تخمین با دقت بسیار بالایی به شباهت حقیقی همگرا می‌گردد.
+	\end{enumerate}
+	
+	% =========================================================
+	% سؤال چهارم
+	% =========================================================
+	\newpage
+	\section{سؤال چهارم: تنظیم پارامترهای الگوریتم \lr{LSH} در سامانه پایش اخبار}
+	
+	سامانه‌ای با طول امضای $K=18$ به $b$ باند با $r$ سطر افراز می‌شود ($b \times r = 18$).
+	
+	\textbf{مشخصات ترافیک و محدودیت‌های سامانه:}
+	تعداد زوج‌های مشابه $N_{\text{sim}} = 120$ ($s_1 = 0.76$)، زوج‌های غیرمشابه $N_{\text{dissim}} = 900$ ($s_2 = 0.28$)، حداقل نرخ پوشش مشابه $P(s=0.76) \ge 0.90$ و سقف کاندیدهای روزانه $\mathbb{E}[N] \le 250$ است.
+	
+	\subsection{الف) حالت‌های ممکن $(b, r)$ و رابطه احتمال کاندید شدن}
+	حالت‌های ممکن ۶ جفت مقسوم‌علیه ۱۸ هستند: $(b, r) \in \{(1, 18), (2, 9), (3, 6), (6, 3), (9, 2), (18, 1)\}$.
+	احتمال تطابق یک زوج در تمام $r$ سطر یک باند برابر $s^r$ و احتمال کاندید شدن در حداقل یک باند از $b$ باند برابر است با:
+	\begin{equation}
+		P_{b,r}(s) = 1 - (1 - s^r)^b
+	\end{equation}
+	
+	\subsection{ب) جدول مقایسه‌ای جامع تنظیمات ممکن}
+	
+	\begin{table}[H]
+		\centering
+		\small
+		\renewcommand{\arraystretch}{1.20}
+		\caption{ارزیابی تمامی تنظیمات ممکن $(b, r)$ با شرط $b \times r = 18$}
+		\vspace{0.12cm}
+		\begin{latin}
+			\begin{tabular}{cccccc}
+				\toprule
+				\rowcolor{headerBg}
+				$(b, r)$ & $p = P(0.76)$ & $q = P(0.28)$ & $\mathbb{E}[N]$ & Coverage $\ge 90\%$ & Capacity $\le 250$ \\
+				\midrule
+				$(1, 18)$ & $0.007156$ & $1.119 \times 10^{-10}$ & $0.859$ & No ($0.72\%$) & Yes \\
+				$(2, 9)$  & $0.162026$ & $2.116 \times 10^{-5}$  & $19.462$ & No ($16.20\%$) & Yes \\
+				$(3, 6)$  & $0.473856$ & $0.001445$ & $58.163$ & No ($47.39\%$) & Yes \\
+				\rowcolor{highlightRow}
+				$\mathbf{(6, 3)}$ & $\mathbf{0.968819}$ & $\mathbf{0.124692}$ & $\mathbf{228.481}$ & \textbf{Yes ($96.88\%$)} & \textbf{Yes} \\
+				$(9, 2)$  & $0.999572$ & $0.520397$ & $588.306$ & Yes ($99.96\%$) & No ($588.3 > 250$) \\
+				$(18, 1)$ & $1.000000$ & $0.997296$ & $1017.567$ & Yes ($100\%$) & No ($1017.6 > 250$) \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{table}
+	
+	\subsection{ج) انتخاب و توجیه تنظیم بهینه و شاخص‌های آماری آن}
+	تنها پیکربندی که هر دو محدودیت عملیاتی را هم‌زمان برآورده می‌سازد، تنظیم \textbf{$b=6$ و $r=3$} است:
+	
+	\begin{tcolorbox}[accentcard, title={مشخصات و محاسبات دقیق تنظیم منتخب $(b=6, r=3)$}]
+		\small
+		\begin{align*}
+			p &= 1 - (1 - 0.76^3)^6 = 1 - (1 - 0.438976)^6 \approx 0.968819 \quad (96.88\%) \\
+			q &= 1 - (1 - 0.28^3)^6 = 1 - (1 - 0.021952)^6 \approx 0.124692 \quad (12.47\%)
+		\end{align*}
+		\vspace{-0.1cm}
+		\begin{itemize}
+			\item \textbf{تعداد کاندیدهای مشابه واقعی (\lr{True Positives}):} $\mathbb{E}[N_{\text{similar}}] = 120 \times 0.968819 \approx 116.258 \text{ زوج}$
+			\item \textbf{تعداد کاندیدهای غیرمشابه (\lr{False Positives}):} $\mathbb{E}[N_{\text{dissimilar}}] = 900 \times 0.124692 \approx 112.223 \text{ زوج}$
+			\item \textbf{تعداد کل کاندیدهای ارزیابی‌شده در روز:} $\mathbb{E}[N] = 116.258 + 112.223 = 228.481 \le 250$ \quad \textbf{(پذیرفته)}
+			\item \textbf{تعداد زوج‌های مشابه ازدست‌رفته (\lr{False Negatives}):} $\mathbb{E}[N_{\text{missed}}] = 120 \times (1 - p) \approx 3.742 \text{ زوج}$
+		\end{itemize}
+	\end{tcolorbox}
+	
+	% =========================================================
+	% سؤال پنجم
+	% =========================================================
+	\newpage
+	\section{سؤال پنجم: مروری بر پیاده‌سازی‌های عملی نوت‌بوک‌ها}
+	
+	\subsection{بخش اول: پردازش توزیع‌شده داده‌های \lr{MovieLens} با \lr{PySpark}}
+	در نوت‌بوک \texttt{BigData\_HW1\_MapReduce.ipynb}، پایپ‌لاین کامل تحلیل داده‌های تماشاگران با مدل \lr{MapReduce} بر بستر \lr{PySpark} پیاده‌سازی و اجرا گردید:
+	
+	\begin{tcolorbox}[primarycard, before skip=3pt, after skip=4pt, top=3pt, bottom=3pt, title={گام‌های اجرایی و نتایج پایپ‌لاین در \lr{PySpark}}]
+		\small
+		\begin{enumerate}[noitemsep, topsep=1pt]
+			\item \textbf{فاز \lr{Map}:} استخراج ۱۰۰٬۰۰۰ رکورد \texttt{users.txt} و تولید زوج‌های کلید-مقدار: \mbox{\lr{\texttt{(movie\_id, (rating, 1))}}}.
+			\item \textbf{فاز \lr{Reduce}:} تجمیع موازی مجموع امتیازها و شمارش آرا با متد \lr{\texttt{reduceByKey}} بر پایه خاصیت شرکت‌پذیری.
+			\item \textbf{محاسبه قطعی میانگین:} تبدیل آماره‌های تجمیعی به میانگین با نسبت $\frac{\text{sum}}{\text{count}}$ توسط \lr{\texttt{mapValues}}.
+			\item \textbf{پالایش فیلم‌های واجد شرایط ($\ge 5$ رأی):}
+			از ۱,۶۸۲ فیلم دیتاست، ۱,۳۴۹ فیلم حداقل ۵ رأی داشتند:
+			\begin{itemize}[noitemsep, topsep=1pt]
+				\item \textbf{کمترین میانگین ($1.0000$):} ۳ فیلم با شناسه‌های ۳۱۴، ۴۳۷ و ۴۳۹ (هر یک دارای ۵ رأی).
+				\item \textbf{بیشترین میانگین ($4.6250$):} فیلم \lr{Pather Panchali (1955)} با شناسه ۱۴۴۹ و ۸ رأی.
+			\end{itemize}
+		\end{enumerate}
+	\end{tcolorbox}
+	
+	\subsection{بخش دوم: جست‌وجوی معنایی با \lr{Random-Hyperplane LSH}}
+	در نوت‌بوک \texttt{Big\_Data\_HW1\_LSH.ipynb}، بازیابی نظرات دارویی با امبدینگ‌های مدل \lr{all-mpnet-base-v2} ($d=768$) عملیاتی شد:
+	
+	\begin{tcolorbox}[tealcard, before skip=3pt, after skip=4pt, top=3pt, bottom=3pt, title={نتایج مقایسه‌ای الگوریتم \lr{LSH} در برابر جست‌وجوی دقیق (\lr{Exact Search})}]
+		\small
+		پایگاه داده شامل ۲۵٬۹۷۱ نظر بالینی بیماران با ابعاد $(25971 \times 768)$ و حجم حافظه $76.09\text{ MB}$ نمایه‌سازی شد. برای پرسمان کوئری با موضوع «سنگینی قفسه سینه و تنگی نفس»، نتایج عملکردی زیر حاصل گردید:
+		
+		\begin{center}
+		\footnotesize
+		\renewcommand{\arraystretch}{1.08}
+		\begin{tabular}{ccccc}
+			\toprule
+			\textbf{روش جست‌وجو} & \textbf{اسناد بررسی‌شده} & \textbf{زمان پاسخ‌گویی} & \textbf{ضریب شتاب} & \textbf{۳ سند برتر بازیابی‌شده (\lr{Top-3 IDs})} \\
+			\midrule
+			جست‌وجوی دقیق (\lr{Exact}) & ۲۵٬۹۷۱ سند & $0.0501 \text{ s}$ & $1.00\times$ & \lr{[24942, 14260, 17166]} \\
+			الگوریتم \lr{LSH} ($L=25$) & ۸۴۳ سند & $0.0047 \text{ s}$ & $10.72\times$ & \lr{[17166, 9882, 23338]} \\
+			\bottomrule
+		\end{tabular}
+		\end{center}
+		
+		\begin{itemize}[noitemsep, topsep=1pt]
+			\item \textbf{کاهش فضای جست‌وجو:} فضای مقایسه از ۲۵٬۹۷۱ به ۸۴۳ سند کاندید ($3.25\%$) تقلیل یافت (کاهش بیش از ۹۶٫۷۵٪).
+			\item \textbf{تحلیل بازیابی و دقت:} سند شماره ۱۷۱۶۶ (با تشخیص پزشکی برونشیت و علائم تنفسی) به صورت مشترک توسط هر دو روش استخراج گردید که نشان‌دهنده $\text{Recall}@3 = 33.3\%$ در ازای شتاب زمانی بیش از ۱۰ برابری است.
+		\end{itemize}
+	\end{tcolorbox}
+	
+
+	
+\end{document}
