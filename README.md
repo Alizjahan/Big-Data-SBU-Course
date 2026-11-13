@@ -74,13 +74,13 @@ Big-Data-SBU-Course/
 
 ## Coursework & Final Project
 
-### 📝 Assignments (ssignments/)
+### Assignments (assignments/)
 
 | Assignment | Topic & Focus Areas | Technologies | Deliverables |
 | :--- | :--- | :--- | :--- |
 | **[HW1 — MapReduce & LSH](assignments/HW1/)** | Matrix Multiplication, Relational Algebra, MovieLens Rating Aggregation, Random-Hyperplane LSH on Medical Embeddings | PySpark, Sentence-Transformers, XeLaTeX | [Code & Documentation](assignments/HW1/) • [فارسی](assignments/HW1/README_FA.md) |
 
-- **Final Project (inal-project/):** An end-to-end distributed data processing capstone project solving a real-world massive data mining challenge.
+- **Final Project (final-project/):** An end-to-end distributed data processing capstone project solving a real-world massive data mining challenge.
 
 ---
 
