@@ -44,16 +44,16 @@ The course focuses on the algorithmic and theoretical principles of analyzing ma
 
 The curriculum investigates key algorithmic pillars designed to extract insights from massive-scale data streams, graphs, and matrices:
 
-| Chapter | Topic | Key Algorithmic Concepts | Focus Domain |
-| :--- | :--- | :--- | :--- |
-| **Chapter 2** | **MapReduce & Distributed Computing** | MapReduce programming model, Map/Reduce tasks, Distributed File System (DFS/HDFS), matrix multiplication algorithms | Distributed Systems |
-| **Chapter 3** | **Finding Similar Items** | Shingling of documents, Min-Hashing, Locality-Sensitive Hashing (LSH), distance measures (Jaccard, Cosine, Euclidean) | High-Dimensional Search |
-| **Chapter 4** | **Mining Data Streams** | Stream data model, Sampling in a stream, Bloom Filters, Flajolet-Martin counting distinct elements, DGIM algorithm | Real-time Stream Analytics |
-| **Chapter 6** | **Frequent Itemsets & Association Rules** | Market-Basket model, A-Priori algorithm, PCY algorithm, Multistage & Multihash, Limited-Pass algorithms | Pattern Mining & Retail |
-| **Chapter 7** | **Clustering Massive Data** | High-dimensional clustering, BFR algorithm (Mahalanobis distance), CURE algorithm, Hierarchical & Point-Assignment | Unsupervised Learning |
-| **Chapter 8** | **Advertising on the Web** | Online algorithms & Competitive ratio, Online bipartite matching, Greedy matching, AdWords problem & Balance algorithm | Computational Advertising |
-| **Chapter 9** | **Recommendation Systems** | Content-based recommendations, Collaborative filtering (Item/User), Dimensionality reduction, SVD, UV-Decomposition | Personalization Engines |
-| **Chapter 10** | **Mining Social-Network Graphs** | Social networks as graphs, PageRank & Random Walks, Topic-Sensitive PageRank, Community detection & SimRank, Girvan-Newman | Graph Analytics & Web |
+| Topic | Key Algorithmic Concepts | Focus Domain |
+| :--- | :--- | :--- |
+| **MapReduce & Distributed Computing** | MapReduce programming model, Map/Reduce tasks, Distributed File System (DFS/HDFS), matrix multiplication | Distributed Systems |
+| **Finding Similar Items (LSH)** | Shingling of documents, Min-Hashing, Locality-Sensitive Hashing (LSH), distance measures (Jaccard, Cosine) | High-Dimensional Search |
+| **Mining Data Streams** | Stream data model, Sampling in streams, Bloom Filters, Flajolet-Martin counting, DGIM algorithm | Real-time Stream Analytics |
+| **Frequent Itemsets & Association Rules** | Market-Basket model, A-Priori algorithm, PCY algorithm, Multistage & Multihash, Limited-Pass algorithms | Pattern Mining & Retail |
+| **Clustering Massive Data** | High-dimensional clustering, BFR algorithm (Mahalanobis distance), CURE algorithm, Hierarchical clustering | Unsupervised Learning |
+| **Advertising on the Web** | Online algorithms & Competitive ratio, Online bipartite matching, AdWords problem & Balance algorithm | Computational Advertising |
+| **Recommendation Systems** | Content-based recommendations, Collaborative filtering (Item/User), Dimensionality reduction, SVD | Personalization Engines |
+| **Mining Social-Network Graphs** | Social networks as graphs, PageRank & Random Walks, Topic-Sensitive PageRank, Community detection, SimRank | Graph Analytics & Web |
 
 ---
 
